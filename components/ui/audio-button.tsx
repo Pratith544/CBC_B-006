@@ -9,9 +9,10 @@ interface AudioButtonProps {
   text: string;
   className?: string;
   size?: 'default' | 'sm' | 'lg' | 'icon';
+  label?: string;
 }
 
-export function AudioButton({ text, className, size = 'icon' }: AudioButtonProps) {
+export function AudioButton({ text, className, size = 'icon', label }: AudioButtonProps) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const playAudio = () => {
@@ -37,6 +38,7 @@ export function AudioButton({ text, className, size = 'icon' }: AudioButtonProps
       onClick={playAudio}
     >
       <Volume2 className="h-4 w-4" />
+      `${label}`
       <span className="sr-only">Play audio description</span>
     </Button>
   );
