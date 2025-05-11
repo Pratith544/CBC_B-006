@@ -15,7 +15,7 @@ export default function PageContainer({
 }: PageContainerProps) {
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
+      {/* <Header /> */}
       <main
         className={`flex-grow pt-16 ${
           fullWidth ? "" : "max-w-7xl mx-auto px-4 md:px-8"
@@ -23,7 +23,7 @@ export default function PageContainer({
       >
         {children}
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

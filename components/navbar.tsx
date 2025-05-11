@@ -7,7 +7,7 @@ import {
   Home,
   Settings,
   ThumbsUp,
-  Languages,
+  Languages as LanguagesIcon,
   ArrowRight,
   Menu,
   X,
@@ -15,27 +15,27 @@ import {
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { useMobile } from "@/hooks/use-mobile";
+import TranslateWidget from "@/lib/translate";
 
 export default function Navbar() {
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const isMobile = useMobile();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
-  // Prevent hydration mismatch
+  const [mounted, setMounted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+
+  // avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
-
   if (!mounted) return null;
-
-  const isDark = theme === "dark";
 
   const navItems = [
     { icon: <Home className="h-5 w-5" />, label: "Home" },
     { icon: <Settings className="h-5 w-5" />, label: "Features" },
     { icon: <ThumbsUp className="h-5 w-5" />, label: "Benefits" },
-    { icon: <Languages className="h-5 w-5" />, label: "Languages" },
   ];
 
   return (
@@ -47,78 +47,66 @@ export default function Navbar() {
           : "bg-[#FFF9E6]/95 backdrop-blur-sm"
       )}
     >
+      {/* Logo */}
       <div className="flex items-center gap-2">
-        <div
+        <span
           className={cn(
-            "font-bold text-xl flex items-center",
+            "font-bold text-xl",
             isDark ? "text-[#FF8F00]" : "text-[#D35400]"
           )}
         >
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="mr-2"
-          >
-            <path
-              d="M16 4C9.373 4 4 9.373 4 16C4 22.627 9.373 28 16 28C22.627 28 28 22.627 28 16C28 9.373 22.627 4 16 4ZM8 16C8 11.582 11.582 8 16 8V24C11.582 24 8 20.418 8 16Z"
-              fill={isDark ? "#FF8F00" : "#D35400"}
-            />
-            <path
-              d="M20 12C18.895 12 18 12.895 18 14V18C18 19.105 18.895 20 20 20C21.105 20 22 19.105 22 18V14C22 12.895 21.105 12 20 12Z"
-              fill={isDark ? "#66BB6A" : "#2E8B57"}
-            />
-          </svg>
           Gram Net
-        </div>
+        </span>
       </div>
 
       {isMobile ? (
         <>
+          {/* Mobile controls */}
           <div className="flex items-center gap-2">
             <ModeToggle />
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
             >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {menuOpen ? <X /> : <Menu />}
             </Button>
           </div>
 
-          {isMenuOpen && (
+          {/* Mobile menu */}
+          {menuOpen && (
             <div
               className={cn(
                 "absolute top-full left-0 right-0 p-4 flex flex-col gap-2 shadow-lg",
                 isDark ? "bg-[#121F2F]" : "bg-[#FFF9E6]"
               )}
             >
-              {navItems.map((item, index) => (
+              {navItems.map((item, i) => (
                 <Button
-                  key={index}
+                  key={i}
                   variant="ghost"
                   className="justify-start gap-2 w-full"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => setMenuOpen(false)}
                 >
                   {item.icon}
-                  <span>{item.label}</span>
+                  {item.label}
                 </Button>
               ))}
+
+              {/* Translate widget inline */}
+              <div className="mt-2">
+                <TranslateWidget />
+              </div>
+
               <Button
                 className={cn(
-                  "mt-2 gap-2",
+                  "mt-4 gap-2",
                   isDark
                     ? "bg-[#FF8F00] hover:bg-[#FF8F00]/90"
                     : "bg-[#D35400] hover:bg-[#D35400]/90"
                 )}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={() => setMenuOpen(false)}
               >
                 Get Started <ArrowRight className="h-4 w-4" />
               </Button>
@@ -126,24 +114,45 @@ export default function Navbar() {
           )}
         </>
       ) : (
+        /* Desktop menu */
         <div className="flex items-center gap-6">
-          {navItems.map((item, index) => (
-            <Button
-              key={index}
-              variant="ghost"
-              className="flex items-center gap-2"
-              aria-label={item.label}
-            >
+          {navItems.map((item, i) => (
+            <Button key={i} variant="ghost" className="flex items-center gap-2">
               {item.icon}
-              <span>{item.label}</span>
+              {item.label}
             </Button>
           ))}
+
           <ModeToggle />
+
+          {/* Languages dropdown */}
+          <div className="relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setLangOpen((v) => !v)}
+              aria-label="Select language"
+            >
+              <LanguagesIcon className="h-5 w-5" />
+            </Button>
+            {langOpen && (
+              <div
+                className={cn(
+                  "absolute right-0 mt-2 w-56 p-2 rounded shadow-xl",
+                  isDark ? "bg-[#1A2A3A]" : "bg-white"
+                )}
+              >
+                <TranslateWidget />
+              </div>
+            )}
+          </div>
+
           <Button
             className={cn(
               isDark
                 ? "bg-[#FF8F00] hover:bg-[#FF8F00]/90"
-                : "bg-[#D35400] hover:bg-[#D35400]/90"
+                : "bg-[#D35400] hover:bg-[#D35400]/90",
+              "flex items-center gap-2"
             )}
           >
             Get Started <ArrowRight className="h-4 w-4 ml-2" />

@@ -2,9 +2,7 @@ import OpenAI from "openai";
 
 // In production, use environment variables for API keys
 // Replace "YOUR_OPENROUTER_API_KEY" with your actual key in .env.local
-const OPENROUTER_API_KEY =
-  process.env.NEXT_PUBLIC_OPENROUTER_API_KEY ||
-  "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";
+const OPENROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "localhost:3001";
 const SITE_NAME = "Rural Digital Empowerment Assistant";
 
