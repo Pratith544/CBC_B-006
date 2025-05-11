@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { FarmerData } from '@/types';
-import PersonalInfoForm from './PersonalInfoForm';
-import LandInfoForm from './LandInfoForm';
-import ClimateInfoForm from './ClimateInfoForm';
-import ResourceInfoForm from './ResourceInfoForm';
-import PreferencesForm from './PreferencesForm';
-import FormProgress from './FormProgress';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { FarmerData } from "@/types";
+import PersonalInfoForm from "./PersonalInfoForm";
+import LandInfoForm from "./LandInfoForm";
+import ClimateInfoForm from "./ClimateInfoForm";
+import ResourceInfoForm from "./ResourceInfoForm";
+import PreferencesForm from "./PreferencesForm";
+import FormProgress from "./FormProgress";
 
 export default function FormWrapper() {
   const router = useRouter();
@@ -16,22 +16,22 @@ export default function FormWrapper() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<FarmerData>>({
     personalInfo: {
-      name: '',
+      name: "",
       age: 0,
       experience: 0,
-      location: '',
+      location: "",
       landSize: 0,
-      landUnit: 'acres',
+      landUnit: "acres",
     },
     landInfo: {
-      soilType: '',
+      soilType: "",
       hasIrrigation: false,
-      waterAvailability: 'sufficient',
-      terrainType: 'flat',
+      waterAvailability: "sufficient",
+      terrainType: "flat",
       previousCrops: [],
     },
     climateInfo: {
-      region: '',
+      region: "",
       annualRainfall: 0,
       rainyMonths: [],
       dryMonths: [],
@@ -42,16 +42,16 @@ export default function FormWrapper() {
     },
     resourceInfo: {
       hasEquipment: false,
-      laborAvailability: 'medium',
+      laborAvailability: "medium",
       hasFertilizers: false,
-      marketAccess: 'good',
+      marketAccess: "good",
     },
     preferences: {
       organicFarming: false,
       sustainablePractices: false,
       cropTypes: [],
-      investmentCapacity: 'medium',
-      riskTolerance: 'medium',
+      investmentCapacity: "medium",
+      riskTolerance: "medium",
     },
   });
 
@@ -79,16 +79,16 @@ export default function FormWrapper() {
 
   const handleSubmit = async () => {
     setLoading(true);
-    
+
     // In a real application, we would validate the data before submission
     try {
       // Store the form data in local storage to access it on the results page
-      localStorage.setItem('farmerData', JSON.stringify(formData));
-      
+      localStorage.setItem("farmerData", JSON.stringify(formData));
+
       // Navigate to the results page
-      router.push('/results');
+      router.push("/resultsAgri");
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
       setLoading(false);
     }
   };
@@ -96,48 +96,48 @@ export default function FormWrapper() {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden">
       <FormProgress currentStep={step} totalSteps={totalSteps} />
-      
+
       <div className="p-6 md:p-8">
         {step === 1 && (
-          <PersonalInfoForm 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            onNext={handleNext} 
+          <PersonalInfoForm
+            formData={formData}
+            updateFormData={updateFormData}
+            onNext={handleNext}
           />
         )}
-        
+
         {step === 2 && (
-          <LandInfoForm 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            onNext={handleNext} 
+          <LandInfoForm
+            formData={formData}
+            updateFormData={updateFormData}
+            onNext={handleNext}
             onBack={handleBack}
           />
         )}
-        
+
         {step === 3 && (
-          <ClimateInfoForm 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            onNext={handleNext} 
+          <ClimateInfoForm
+            formData={formData}
+            updateFormData={updateFormData}
+            onNext={handleNext}
             onBack={handleBack}
           />
         )}
-        
+
         {step === 4 && (
-          <ResourceInfoForm 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            onNext={handleNext} 
+          <ResourceInfoForm
+            formData={formData}
+            updateFormData={updateFormData}
+            onNext={handleNext}
             onBack={handleBack}
           />
         )}
-        
+
         {step === 5 && (
-          <PreferencesForm 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            onNext={handleNext} 
+          <PreferencesForm
+            formData={formData}
+            updateFormData={updateFormData}
+            onNext={handleNext}
             onBack={handleBack}
             loading={loading}
           />
