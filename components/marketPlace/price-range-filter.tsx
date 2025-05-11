@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { cn } from '../../lib/utils';
-import { IndianRupee } from 'lucide-react';
-import React, { useState } from 'react';
+import { cn } from "../../lib/utils";
+import { IndianRupee } from "lucide-react";
+import React, { useState } from "react";
 
 interface PriceRangeFilterProps {
   minPrice: number;
@@ -15,7 +15,10 @@ export const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
   maxPrice,
   onChange,
 }) => {
-  const [localRange, setLocalRange] = useState<[number, number]>([minPrice, maxPrice]);
+  const [localRange, setLocalRange] = useState<[number, number]>([
+    minPrice,
+    maxPrice,
+  ]);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,16 +55,24 @@ export const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
         </div>
       </button>
 
-      <div className={cn(
-        "absolute z-10 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4 transition-all duration-200",
-        isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1 pointer-events-none"
-      )}>
+      <div
+        className={cn(
+          "absolute z-10 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4 transition-all duration-200",
+          isOpen
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-1 pointer-events-none"
+        )}
+      >
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Min Price</label>
+              <label className="block text-sm font-medium mb-1">
+                Min Price
+              </label>
               <div className="relative">
-                <span className="absolute left-3 top-3 text-muted-foreground">₹</span>
+                <span className="absolute left-3 top-3 text-muted-foreground">
+                  ₹
+                </span>
                 <input
                   type="number"
                   min={minPrice}
@@ -73,9 +84,13 @@ export const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Max Price</label>
+              <label className="block text-sm font-medium mb-1">
+                Max Price
+              </label>
               <div className="relative">
-                <span className="absolute left-3 top-3 text-muted-foreground">₹</span>
+                <span className="absolute left-3 top-3 text-muted-foreground">
+                  ₹
+                </span>
                 <input
                   type="number"
                   min={localRange[0]}
@@ -87,7 +102,7 @@ export const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
               </div>
             </div>
           </div>
-          
+
           <button
             onClick={handleApply}
             className="w-full bg-primary text-primary-foreground p-3 rounded-lg text-lg font-medium hover:bg-primary/90 transition-colors min-h-[48px]"

@@ -58,8 +58,75 @@ export interface HourForecast {
 }
 
 export interface ChatMessage {
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
 }
 
-export type ViewType = 'weather' | 'chatbot';
+export type ViewType = "weather" | "chatbot";
+
+// Types for the application
+
+export interface Question {
+  id: string;
+  text: string;
+  type: "text" | "select" | "multiselect" | "radio" | "checkbox";
+  options?: string[];
+  category: "personal" | "agriculture" | "financial" | "technical";
+  required: boolean;
+}
+
+export interface QuestionnaireResponse {
+  [key: string]: string | string[];
+}
+
+export interface LearningModule {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  difficulty: "beginner" | "intermediate" | "advanced";
+  estimatedTime: string;
+  imageUrl?: string;
+}
+
+export interface ModuleContent {
+  title: string;
+  introduction: string;
+  sections: ModuleSection[];
+  conclusion: string;
+  resources: Resource[];
+}
+
+export interface ModuleSection {
+  title: string;
+  content: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  quiz?: Quiz;
+}
+
+export interface Quiz {
+  questions: QuizQuestion[];
+}
+
+export interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+}
+
+export interface Resource {
+  title: string;
+  url: string;
+  type: "article" | "video" | "pdf" | "website";
+}
+
+export interface UserProgress {
+  userId: string;
+  completedModules: string[];
+  currentModule?: string;
+  moduleProgress: {
+    [moduleId: string]: number; // Percentage completed
+  };
+}

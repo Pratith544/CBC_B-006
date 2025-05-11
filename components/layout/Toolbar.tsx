@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ViewType } from '@/lib/types';
-import { cn } from '@/lib/utils';
-import { BarChart2, MessageSquare, Search } from 'lucide-react';
+import { useState } from "react";
+import { ViewType } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { BarChart2, MessageSquare, Search } from "lucide-react";
 
 interface ToolbarProps {
   activeView: ViewType;
@@ -38,8 +38,8 @@ export default function Toolbar({
           </div>
         </div>
 
-        <form 
-          onSubmit={handleSubmit} 
+        <form
+          onSubmit={handleSubmit}
           className={cn(
             "relative flex-1 max-w-md transition-all duration-200",
             isSearchFocused ? "scale-105" : ""
@@ -61,10 +61,10 @@ export default function Toolbar({
 
         <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
           <button
-            onClick={() => onViewChange('weather')}
+            onClick={() => onViewChange("weather")}
             className={cn(
               "px-4 py-2 rounded-md flex items-center gap-2 transition-colors",
-              activeView === 'weather'
+              activeView === "weather"
                 ? "bg-white text-primary shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
             )}
@@ -73,10 +73,10 @@ export default function Toolbar({
             <span className="hidden sm:inline">Weather</span>
           </button>
           <button
-            onClick={() => onViewChange('chatbot')}
+            onClick={() => onViewChange("chatbot")}
             className={cn(
               "px-4 py-2 rounded-md flex items-center gap-2 transition-colors",
-              activeView === 'chatbot'
+              activeView === "chatbot"
                 ? "bg-white text-primary shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
             )}
