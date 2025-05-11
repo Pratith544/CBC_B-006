@@ -1,170 +1,174 @@
-import Link from 'next/link';
-import { AudioButton } from '@/components/ui/audio-button';
-import { cn } from '@/lib/utils';
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Youtube 
-} from 'lucide-react';
+"use client";
 
-export function Footer() {
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
+import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+
+export default function Footer() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  const footerLinks = [
+    {
+      title: "Product",
+      links: ["Features", "How it works", "Pricing", "FAQ"],
+    },
+    {
+      title: "Resources",
+      links: ["Blog", "Guides", "Support", "API"],
+    },
+    {
+      title: "Company",
+      links: ["About", "Careers", "Contact", "Partners"],
+    },
+    {
+      title: "Legal",
+      links: ["Privacy", "Terms", "Security", "Accessibility"],
+    },
+  ];
+
+  const socialLinks = [
+    { icon: <Facebook className="h-5 w-5" />, label: "Facebook" },
+    { icon: <Twitter className="h-5 w-5" />, label: "Twitter" },
+    { icon: <Instagram className="h-5 w-5" />, label: "Instagram" },
+    { icon: <Youtube className="h-5 w-5" />, label: "YouTube" },
+  ];
+
   return (
-    <footer className="bg-muted/30 border-t border-border pt-12 pb-6">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
-          <div className="md:col-span-4">
-            <div className="flex items-center gap-2 mb-4">
-              <FooterLogo className="h-8 w-8 text-primary" />
-              <span className="font-bold text-xl">Voice Bridge</span>
+    <footer
+      className={cn(
+        "py-12 px-6 md:px-12",
+        isDark ? "bg-[#121F2F]" : "bg-[#FFF9E6]"
+      )}
+    >
+      <div className="container mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+          <div className="lg:col-span-2">
+            <div
+              className={cn(
+                "font-bold text-xl flex items-center mb-4",
+                isDark ? "text-[#FF8F00]" : "text-[#D35400]"
+              )}
+            >
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="mr-2"
+              >
+                <path
+                  d="M16 4C9.373 4 4 9.373 4 16C4 22.627 9.373 28 16 28C22.627 28 28 22.627 28 16C28 9.373 22.627 4 16 4ZM8 16C8 11.582 11.582 8 16 8V24C11.582 24 8 20.418 8 16Z"
+                  fill={isDark ? "#FF8F00" : "#D35400"}
+                />
+                <path
+                  d="M20 12C18.895 12 18 12.895 18 14V18C18 19.105 18.895 20 20 20C21.105 20 22 19.105 22 18V14C22 12.895 21.105 12 20 12Z"
+                  fill={isDark ? "#66BB6A" : "#2E8B57"}
+                />
+              </svg>
+              Gram Net
             </div>
-            <p className="text-muted-foreground mb-6">
-              Making information accessible to everyone through the power of voice technology.
+            <p
+              className={cn(
+                "mb-6 max-w-md",
+                isDark ? "text-[#F5F5F5]/70" : "text-[#333333]/70"
+              )}
+            >
+              Empowering rural communities with voice-based technology that
+              bridges the digital divide and provides access to essential
+              information.
             </p>
-            <div className="flex space-x-4">
-              <SocialLink icon={<Facebook className="h-5 w-5" />} href="#" label="Facebook" />
-              <SocialLink icon={<Twitter className="h-5 w-5" />} href="#" label="Twitter" />
-              <SocialLink icon={<Instagram className="h-5 w-5" />} href="#" label="Instagram" />
-              <SocialLink icon={<Youtube className="h-5 w-5" />} href="#" label="YouTube" />
+            <div className="flex gap-4">
+              {socialLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  className={cn(
+                    "p-2 rounded-full transition-colors",
+                    isDark
+                      ? "text-[#F5F5F5]/70 hover:text-[#FF8F00] hover:bg-[#1A2A3A]"
+                      : "text-[#333333]/70 hover:text-[#D35400] hover:bg-white"
+                  )}
+                  aria-label={link.label}
+                >
+                  {link.icon}
+                </a>
+              ))}
             </div>
           </div>
 
-          <div className="md:col-span-2">
-            <h3 className="font-semibold mb-4">Product</h3>
-            <ul className="space-y-2">
-              <FooterLink href="#features">Features</FooterLink>
-              <FooterLink href="#testimonials">Testimonials</FooterLink>
-              <FooterLink href="#languages">Languages</FooterLink>
-              <FooterLink href="#pricing">Pricing</FooterLink>
-            </ul>
-          </div>
-
-          <div className="md:col-span-2">
-            <h3 className="font-semibold mb-4">Resources</h3>
-            <ul className="space-y-2">
-              <FooterLink href="#help">Help Center</FooterLink>
-              <FooterLink href="#tutorial">Tutorial Videos</FooterLink>
-              <FooterLink href="#blog">Blog</FooterLink>
-              <FooterLink href="#faq">FAQs</FooterLink>
-            </ul>
-          </div>
-
-          <div className="md:col-span-4">
-            <h3 className="font-semibold mb-4">Contact</h3>
-            <ul className="space-y-3">
-              <ContactItem 
-                icon={<Phone className="h-5 w-5" />} 
-                content="1800-123-4567 (Toll Free)"
-                audioText="Call our toll free number, 1-800-123-4567"
-              />
-              <ContactItem 
-                icon={<Mail className="h-5 w-5" />} 
-                content="help@voicebridge.org"
-                audioText="Email us at help@voicebridge.org"
-              />
-              <ContactItem 
-                icon={<MapPin className="h-5 w-5" />} 
-                content="123 Tech Park, Bengaluru, India 560001"
-                audioText="Visit us at 123 Tech Park, Bengaluru, India 560001"
-              />
-            </ul>
-          </div>
+          {footerLinks.map((section, index) => (
+            <div key={index}>
+              <h3
+                className={cn(
+                  "font-semibold mb-4",
+                  isDark ? "text-[#F5F5F5]" : "text-[#333333]"
+                )}
+              >
+                {section.title}
+              </h3>
+              <ul className="space-y-2">
+                {section.links.map((link, linkIndex) => (
+                  <li key={linkIndex}>
+                    <a
+                      href="#"
+                      className={cn(
+                        "transition-colors",
+                        isDark
+                          ? "text-[#F5F5F5]/70 hover:text-[#FF8F00]"
+                          : "text-[#333333]/70 hover:text-[#D35400]"
+                      )}
+                    >
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div className="border-t border-border pt-6 text-sm text-muted-foreground">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-              &copy; 2025 Voice Bridge. All rights reserved.
-            </div>
-            <div className="flex space-x-4">
-              <Link href="#privacy" className="hover:text-foreground">Privacy Policy</Link>
-              <Link href="#terms" className="hover:text-foreground">Terms of Service</Link>
-              <Link href="#accessibility" className="hover:text-foreground">Accessibility</Link>
-            </div>
+        <div
+          className={cn(
+            "pt-6 border-t flex flex-col md:flex-row justify-between items-center gap-4",
+            isDark ? "border-[#1A2A3A]" : "border-[#D35400]/10"
+          )}
+        >
+          <p
+            className={cn(
+              "text-sm",
+              isDark ? "text-[#F5F5F5]/50" : "text-[#333333]/50"
+            )}
+          >
+            © 2025 Gram Net. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <a
+              href="#"
+              className={cn(
+                "text-sm transition-colors",
+                isDark
+                  ? "text-[#F5F5F5]/50 hover:text-[#FF8F00]"
+                  : "text-[#333333]/50 hover:text-[#D35400]"
+              )}
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="#"
+              className={cn(
+                "text-sm transition-colors",
+                isDark
+                  ? "text-[#F5F5F5]/50 hover:text-[#FF8F00]"
+                  : "text-[#333333]/50 hover:text-[#D35400]"
+              )}
+            >
+              Terms of Service
+            </a>
           </div>
         </div>
       </div>
     </footer>
-  );
-}
-
-function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <li>
-      <Link 
-        href={href} 
-        className="text-muted-foreground hover:text-foreground transition-colors"
-      >
-        {children}
-      </Link>
-    </li>
-  );
-}
-
-function SocialLink({ icon, href, label }: { icon: React.ReactNode; href: string; label: string }) {
-  return (
-    <Link 
-      href={href}
-      className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-background transition-colors"
-      aria-label={label}
-    >
-      {icon}
-    </Link>
-  );
-}
-
-function ContactItem({ 
-  icon, 
-  content,
-  audioText
-}: { 
-  icon: React.ReactNode; 
-  content: string;
-  audioText: string;
-}) {
-  return (
-    <li className="flex items-center gap-3 group">
-      <div className="text-primary">{icon}</div>
-      <span>{content}</span>
-      <AudioButton 
-        text={audioText} 
-        className="opacity-0 group-hover:opacity-100 transition-opacity"
-      />
-    </li>
-  );
-}
-
-function FooterLogo({ className }: { className?: string }) {
-  return (
-    <div className={cn("relative", className)}>
-      <svg 
-        viewBox="0 0 40 40" 
-        fill="none" 
-        xmlns="http://www.w3.org/2000/svg"
-        className={className}
-      >
-        <path 
-          d="M5 20C5 12.268 11.268 6 19 6C26.732 6 33 12.268 33 20C33 27.732 26.732 34 19 34" 
-          stroke="currentColor" 
-          strokeWidth="4" 
-          strokeLinecap="round"
-        />
-        <path 
-          d="M19 34C15.134 34 12 30.866 12 27C12 23.134 15.134 20 19 20" 
-          stroke="currentColor" 
-          strokeWidth="4" 
-          strokeLinecap="round"
-        />
-        <path 
-          d="M26 27H35" 
-          stroke="currentColor" 
-          strokeWidth="4" 
-          strokeLinecap="round"
-        />
-      </svg>
-    </div>
   );
 }

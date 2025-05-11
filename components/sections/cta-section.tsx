@@ -1,198 +1,108 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { AudioButton } from '@/components/ui/audio-button';
-import { Mic, ArrowRight } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
+import { Mic, Clock } from "lucide-react";
 
-export function CtaSection() {
-  const [step, setStep] = useState(1);
-  const totalSteps = 3;
+export default function CtaSection() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
-  const goToNextStep = () => {
-    if (step < totalSteps) {
-      setStep(step + 1);
-    } else {
-      setStep(1); // Reset for demo purposes
-    }
-  };
+  const steps = [
+    "Speak your question",
+    "Get instant answers",
+    "Take action with confidence",
+  ];
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_110%,rgba(211,84,0,0.1),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_-10%,rgba(46,139,87,0.1),transparent_60%)]" />
+    <section className="py-16 px-6 md:px-12 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className={cn(
+            "absolute right-0 bottom-0 w-64 h-64 rounded-full opacity-10 translate-x-1/2 translate-y-1/2",
+            isDark ? "bg-[#FF8F00]" : "bg-[#D35400]"
+          )}
+        />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="relative inline-block mb-6">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+      <div className="container mx-auto max-w-5xl relative z-10">
+        <div
+          className={cn(
+            "rounded-3xl p-8 md:p-12 shadow-xl",
+            isDark
+              ? "bg-gradient-to-br from-[#1A2A3A] to-[#121F2F] border border-[#FF8F00]/20"
+              : "bg-gradient-to-br from-white to-[#FFF9E6] border border-[#D35400]/10"
+          )}
+        >
+          <div className="text-center mb-8">
+            <h2
+              className={cn(
+                "text-3xl md:text-4xl font-bold mb-4",
+                isDark ? "text-[#F5F5F5]" : "text-[#333333]"
+              )}
+            >
               Ready to get personalized help?
             </h2>
-            <AudioButton
-              text="Ready to get personalized help?"
-              className="absolute -right-2 -top-2"
-            />
+            <p
+              className={cn(
+                "text-lg max-w-2xl mx-auto",
+                isDark ? "text-[#F5F5F5]/80" : "text-[#333333]/80"
+              )}
+            >
+              Start using Gram Net today and transform how you access
+              information
+            </p>
           </div>
 
-          <p className="text-xl text-muted-foreground mb-12">
-            Start using Voice Bridge in just 3 simple steps
-          </p>
-
-          <div className="flex justify-between items-center mb-12 relative">
-            {/* Progress line */}
-            <div className="absolute top-1/2 left-0 right-0 h-1 bg-muted transform -translate-y-1/2"></div>
-            <div 
-              className="absolute top-1/2 left-0 h-1 bg-primary transform -translate-y-1/2 transition-all duration-500"
-              style={{ width: `${(step / totalSteps) * 100}%` }}
-            ></div>
-
-            {/* Step circles */}
-            {[1, 2, 3].map((stepNumber) => (
-              <div 
-                key={stepNumber}
-                className={`w-12 h-12 rounded-full border-2 flex items-center justify-center font-bold text-lg relative z-10 transition-all ${
-                  stepNumber === step 
-                    ? 'border-primary bg-primary text-primary-foreground shadow-lg scale-110' 
-                    : stepNumber < step 
-                      ? 'border-primary bg-primary text-primary-foreground' 
-                      : 'border-muted bg-card text-muted-foreground'
-                }`}
-              >
-                {stepNumber}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 mb-8">
+            {steps.map((step, index) => (
+              <div key={index} className="flex flex-col items-center">
+                <div
+                  className={cn(
+                    "w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mb-4",
+                    isDark
+                      ? "bg-[#FF8F00] text-white"
+                      : "bg-[#D35400] text-white"
+                  )}
+                >
+                  {index + 1}
+                </div>
+                <p
+                  className={cn(
+                    "text-center font-medium",
+                    isDark ? "text-[#F5F5F5]" : "text-[#333333]"
+                  )}
+                >
+                  {step}
+                </p>
               </div>
             ))}
           </div>
 
-          <div className="mb-12">
-            {step === 1 && (
-              <StepContent
-                title="Speak your needs"
-                description="Tell Voice Bridge what you're looking for - market prices, schemes, or business advice"
-                iconComponent={<Mic className="h-12 w-12" />}
-              />
-            )}
-            {step === 2 && (
-              <StepContent
-                title="Get personalized results"
-                description="Voice Bridge finds the most relevant information for your specific situation"
-                iconComponent={<SearchIcon className="h-12 w-12" />}
-              />
-            )}
-            {step === 3 && (
-              <StepContent
-                title="Take action easily"
-                description="Follow the simple steps provided to apply for schemes, contact buyers, or implement advice"
-                iconComponent={<CheckmarkIcon className="h-12 w-12" />}
-              />
-            )}
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col items-center">
             <Button
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 h-auto group"
-              onClick={goToNextStep}
-            >
-              {step < totalSteps ? (
-                <>
-                  Next Step
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </>
-              ) : (
-                <>
-                  Start Now
-                  <Mic className="ml-2 h-5 w-5" />
-                </>
+              className={cn(
+                "gap-2 text-white rounded-full px-8 py-6 text-lg shadow-lg transition-all hover:shadow-xl mb-4",
+                isDark
+                  ? "bg-[#FF8F00] hover:bg-[#FF8F00]/90"
+                  : "bg-[#D35400] hover:bg-[#D35400]/90",
+                "animate-pulse hover:animate-none"
               )}
+            >
+              <Mic className="h-5 w-5" />
+              Start Now
             </Button>
-            
-            <div className="text-muted-foreground flex items-center gap-2">
-              <ClockIcon className="h-5 w-5" />
-              <span>Takes just 2 minutes</span>
+
+            <div className="flex items-center gap-2 text-sm opacity-75">
+              <Clock className="h-4 w-4" />
+              Takes just 2 minutes
             </div>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function StepContent({ 
-  title, 
-  description, 
-  iconComponent 
-}: { 
-  title: string; 
-  description: string; 
-  iconComponent: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col items-center animate-fadeIn">
-      <div className="bg-primary/10 text-primary p-4 rounded-full mb-4">
-        {iconComponent}
-      </div>
-      <h3 className="text-2xl font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground max-w-lg mx-auto">{description}</p>
-    </div>
-  );
-}
-
-// Custom icons
-function SearchIcon({ className }: { className?: string }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-      <path d="M11 8v6" />
-      <path d="M8 11h6" />
-    </svg>
-  );
-}
-
-function CheckmarkIcon({ className }: { className?: string }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-      <path d="m9 12 2 2 4-4" />
-    </svg>
-  );
-}
-
-function ClockIcon({ className }: { className?: string }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
   );
 }

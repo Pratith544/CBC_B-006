@@ -127,7 +127,7 @@ export function ChatModal({ defaultOpen = false, className }: ChatModalProps) {
               opacity: 1,
               y: 0,
               x: isExpanded ? 0 : "calc(50% - 10rem)",
-              width: isExpanded ? "100%" : "20rem",
+              width: isExpanded ? "90%" : "20rem",
               height: isExpanded ? "70%" : "32rem",
             }}
             exit={{
@@ -147,11 +147,11 @@ export function ChatModal({ defaultOpen = false, className }: ChatModalProps) {
               "fixed bottom-4 right-4 z-50",
               isExpanded
                 ? "left-4 lg:left-auto lg:right-4 lg:w-1/3"
-                : "max-w-xs",
+                : "max-w-xs right-36",
               className
             )}
           >
-            <Card className="h-full flex flex-col border shadow-xl overflow-hidden relative">
+            <Card className="h-full min-w-[28rem] flex flex-col border shadow-xl overflow-hidden relative">
               {/* Header */}
               <CardHeader className="p-3 flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="flex items-center gap-2">

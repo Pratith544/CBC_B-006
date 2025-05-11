@@ -1,230 +1,155 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState, useEffect } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import { AudioButton } from "@/components/ui/audio-button";
-import { LanguageSelector } from "@/components/language-selector";
 import {
   Home,
   Settings,
   ThumbsUp,
-  MessageSquareText,
+  Languages,
+  ArrowRight,
   Menu,
   X,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
+import { useMobile } from "@/hooks/use-mobile";
 
-export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function Navbar() {
+  const { theme } = useTheme();
+  const isMobile = useMobile();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  const isDark = theme === "dark";
+
+  const navItems = [
+    { icon: <Home className="h-5 w-5" />, label: "Home" },
+    { icon: <Settings className="h-5 w-5" />, label: "Features" },
+    { icon: <ThumbsUp className="h-5 w-5" />, label: "Benefits" },
+    { icon: <Languages className="h-5 w-5" />, label: "Languages" },
+  ];
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2">
-          <LogoIcon className="h-10 w-10 text-primary" />
-          <span className="font-bold text-xl hidden sm:block">
-            Voice Bridge
-          </span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-1">
-          <NavItem
-            href="/"
-            icon={<Home className="h-5 w-5" />}
-            label="Home"
-            audioText="Navigate to Home page"
-          />
-          <NavItem
-            href="#features"
-            icon={<Settings className="h-5 w-5" />}
-            label="Features"
-            audioText="Learn about our features"
-          />
-          <NavItem
-            href="#benefits"
-            icon={<ThumbsUp className="h-5 w-5" />}
-            label="Benefits"
-            audioText="Discover the benefits"
-          />
-          <NavItem
-            href="#languages"
-            icon={<MessageSquareText className="h-5 w-5" />}
-            label="Languages"
-            audioText="Available languages"
-          />
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <LanguageSelector />
-          <ModeToggle />
-          <Button
-            size="lg"
-            className="hidden md:flex bg-primary hover:bg-primary/90 text-primary-foreground"
-          >
-            Get Started
-            <span className="ml-2">→</span>
-          </Button>
-
-          {/* Mobile menu button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={toggleMenu}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
-        </div>
-      </div>
-
-      {/* Mobile Navigation */}
-      <div
-        className={cn(
-          "md:hidden fixed inset-x-0 top-[62px] bg-background border-b border-border transition-transform duration-300 ease-in-out z-40",
-          isOpen ? "translate-y-0" : "-translate-y-full"
-        )}
-      >
-        <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-          <MobileNavItem
-            href="/"
-            icon={<Home className="h-6 w-6" />}
-            label="Home"
-            audioText="Navigate to Home page"
-            onClick={toggleMenu}
-          />
-          <MobileNavItem
-            href="#features"
-            icon={<Settings className="h-6 w-6" />}
-            label="Features"
-            audioText="Learn about our features"
-            onClick={toggleMenu}
-          />
-          <MobileNavItem
-            href="#benefits"
-            icon={<ThumbsUp className="h-6 w-6" />}
-            label="Benefits"
-            audioText="Discover the benefits"
-            onClick={toggleMenu}
-          />
-          <MobileNavItem
-            href="#languages"
-            icon={<MessageSquareText className="h-6 w-6" />}
-            label="Languages"
-            audioText="Available languages"
-            onClick={toggleMenu}
-          />
-
-          <div className="pt-2 flex items-center justify-between">
-            <LanguageSelector />
-            <Button
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
-              Get Started
-              <span className="ml-2">→</span>
-            </Button>
-          </div>
-        </nav>
-      </div>
-    </header>
-  );
-}
-
-function NavItem({
-  href,
-  icon,
-  label,
-  audioText,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-  audioText: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary group relative"
+    <nav
+      className={cn(
+        "sticky top-0 z-50 w-full py-4 px-6 md:px-12 flex items-center justify-between",
+        isDark
+          ? "bg-[#121F2F]/95 backdrop-blur-sm"
+          : "bg-[#FFF9E6]/95 backdrop-blur-sm"
+      )}
     >
       <div className="flex items-center gap-2">
-        {icon}
-        <span>{label}</span>
-      </div>
-      <AudioButton
-        text={audioText}
-        className="opacity-0 group-hover:opacity-100 transition-opacity absolute -right-1 -top-1"
-      />
-    </Link>
-  );
-}
-
-function MobileNavItem({
-  href,
-  icon,
-  label,
-  audioText,
-  onClick,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-  audioText: string;
-  onClick: () => void;
-}) {
-  return (
-    <Link
-      href={href}
-      className="flex items-center justify-between px-3 py-3 rounded-md text-lg font-medium hover:bg-secondary"
-      onClick={onClick}
-    >
-      <div className="flex items-center gap-3">
-        {icon}
-        <span>{label}</span>
-      </div>
-      <AudioButton text={audioText} />
-    </Link>
-  );
-}
-
-function LogoIcon({ className }: { className?: string }) {
-  return (
-    <div className={cn("relative", className)}>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-6 h-6 rounded-full bg-primary-foreground flex items-center justify-center">
-          <div className="w-1 h-3 bg-primary rounded-full animate-pulse" />
+        <div
+          className={cn(
+            "font-bold text-xl flex items-center",
+            isDark ? "text-[#FF8F00]" : "text-[#D35400]"
+          )}
+        >
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="mr-2"
+          >
+            <path
+              d="M16 4C9.373 4 4 9.373 4 16C4 22.627 9.373 28 16 28C22.627 28 28 22.627 28 16C28 9.373 22.627 4 16 4ZM8 16C8 11.582 11.582 8 16 8V24C11.582 24 8 20.418 8 16Z"
+              fill={isDark ? "#FF8F00" : "#D35400"}
+            />
+            <path
+              d="M20 12C18.895 12 18 12.895 18 14V18C18 19.105 18.895 20 20 20C21.105 20 22 19.105 22 18V14C22 12.895 21.105 12 20 12Z"
+              fill={isDark ? "#66BB6A" : "#2E8B57"}
+            />
+          </svg>
+          Gram Net
         </div>
       </div>
-      <svg
-        viewBox="0 0 40 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className={className}
-      >
-        <path
-          d="M5 20C5 12.268 11.268 6 19 6C26.732 6 33 12.268 33 20C33 27.732 26.732 34 19 34"
-          stroke="currentColor"
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-        <path
-          d="M19 34C15.134 34 12 30.866 12 27C12 23.134 15.134 20 19 20"
-          stroke="currentColor"
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-        <path
-          d="M26 27H35"
-          stroke="currentColor"
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-      </svg>
-    </div>
+
+      {isMobile ? (
+        <>
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
+          </div>
+
+          {isMenuOpen && (
+            <div
+              className={cn(
+                "absolute top-full left-0 right-0 p-4 flex flex-col gap-2 shadow-lg",
+                isDark ? "bg-[#121F2F]" : "bg-[#FFF9E6]"
+              )}
+            >
+              {navItems.map((item, index) => (
+                <Button
+                  key={index}
+                  variant="ghost"
+                  className="justify-start gap-2 w-full"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.icon}
+                  <span>{item.label}</span>
+                </Button>
+              ))}
+              <Button
+                className={cn(
+                  "mt-2 gap-2",
+                  isDark
+                    ? "bg-[#FF8F00] hover:bg-[#FF8F00]/90"
+                    : "bg-[#D35400] hover:bg-[#D35400]/90"
+                )}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Get Started <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="flex items-center gap-6">
+          {navItems.map((item, index) => (
+            <Button
+              key={index}
+              variant="ghost"
+              className="flex items-center gap-2"
+              aria-label={item.label}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </Button>
+          ))}
+          <ModeToggle />
+          <Button
+            className={cn(
+              isDark
+                ? "bg-[#FF8F00] hover:bg-[#FF8F00]/90"
+                : "bg-[#D35400] hover:bg-[#D35400]/90"
+            )}
+          >
+            Get Started <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
+      )}
+    </nav>
   );
 }

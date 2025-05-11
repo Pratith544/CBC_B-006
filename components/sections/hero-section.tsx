@@ -1,124 +1,213 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { AudioButton } from '@/components/ui/audio-button';
-import { Mic, Play } from 'lucide-react';
-import Image from 'next/image';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Mic, Play, Volume2 } from "lucide-react";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
+import { useMobile } from "@/hooks/use-mobile";
 
-export function HeroSection() {
-  const [isAnimating, setIsAnimating] = useState(false);
+export default function HeroSection() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  const isMobile = useMobile();
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const startAnimation = () => {
-    setIsAnimating(true);
-    setTimeout(() => setIsAnimating(false), 3000);
+  const toggleAudio = () => {
+    setIsPlaying(!isPlaying);
+    // Audio playback logic would go here
   };
 
-  useEffect(() => {
-    // Auto-play animation once after mounting
-    const timer = setTimeout(() => {
-      startAnimation();
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <section className="relative overflow-hidden py-16 md:py-24">
-      {/* Background pattern */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(255,179,15,0.1),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(46,139,87,0.1),transparent_60%)]" />
+    <section className="relative py-16 md:py-24 px-6 md:px-12 overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className={cn(
+            "absolute -right-24 -top-24 w-64 h-64 rounded-full opacity-10",
+            isDark ? "bg-[#FF8F00]" : "bg-[#D35400]"
+          )}
+        />
+        <div
+          className={cn(
+            "absolute -left-24 bottom-0 w-48 h-48 rounded-full opacity-10",
+            isDark ? "bg-[#66BB6A]" : "bg-[#2E8B57]"
+          )}
+        />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
-          <div className="flex-1 text-center md:text-left">
-            <div className="relative inline-block mb-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+      <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+          <div className="flex-1 space-y-6">
+            <div className="space-y-2">
+              <h1
+                className={cn(
+                  "text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight",
+                  isDark ? "text-[#F5F5F5]" : "text-[#333333]"
+                )}
+              >
                 Smart Voice Assistant for Farmers & Small Businesses
               </h1>
-              <AudioButton
-                text="Smart Voice Assistant for Farmers and Small Businesses"
-                className="absolute -right-2 -top-2"
-              />
-            </div>
-
-            <div className="relative inline-block">
-              <p className="text-xl md:text-2xl text-muted-foreground mb-8">
-                Speak in your own language. Get schemes, market prices & more — instantly.
-              </p>
-              <AudioButton
-                text="Speak in your own language. Get schemes, market prices and more — instantly."
-                className="absolute -right-2 -top-2"
-              />
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
-              <Button 
-                size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 h-auto group relative"
-                onClick={startAnimation}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-2"
+                onClick={toggleAudio}
+                aria-label="Play audio"
               >
-                <Mic className={`h-5 w-5 mr-2 transition-all duration-300 ${isAnimating ? 'scale-125' : 'scale-100'}`} />
-                Start Talking
-                <span className={`absolute inset-0 rounded-md border-2 border-primary transition-all duration-1000 ${isAnimating ? 'scale-150 opacity-0' : 'scale-100 opacity-0'}`}></span>
+                {isPlaying ? (
+                  <Volume2
+                    className={cn(
+                      "h-4 w-4",
+                      isDark ? "text-[#FFC107]" : "text-[#FFB30F]"
+                    )}
+                  />
+                ) : (
+                  <Play
+                    className={cn(
+                      "h-4 w-4",
+                      isDark ? "text-[#FFC107]" : "text-[#FFB30F]"
+                    )}
+                  />
+                )}
+                <span className="text-sm">Listen</span>
               </Button>
-              
-              <Button 
-                variant="outline" 
+            </div>
+
+            <p
+              className={cn(
+                "text-lg md:text-xl",
+                isDark ? "text-[#F5F5F5]/80" : "text-[#333333]/80"
+              )}
+            >
+              Speak in your own language. Get schemes, market prices & more —
+              instantly.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Button
                 size="lg"
-                className="text-lg px-6 py-6 h-auto border-2"
+                className={cn(
+                  "gap-2 text-white rounded-full px-8 shadow-lg transition-all hover:shadow-xl",
+                  isDark
+                    ? "bg-[#FF8F00] hover:bg-[#FF8F00]/90"
+                    : "bg-[#D35400] hover:bg-[#D35400]/90",
+                  "animate-pulse hover:animate-none"
+                )}
               >
-                <Play className="h-5 w-5 mr-2" />
-                Watch Demo
+                <Mic className="h-5 w-5" />
+                Start Talking
               </Button>
+              <div className="flex items-center gap-2">
+                <div
+                  className={cn(
+                    "w-2 h-2 rounded-full",
+                    isDark ? "bg-[#FFC107]" : "bg-[#FFB30F]"
+                  )}
+                />
+                <span className="text-sm opacity-75">
+                  Audio welcome available
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="flex-1 relative">
-            <div className="relative w-full aspect-square max-w-[500px] mx-auto">
-              <div className={`absolute inset-0 bg-muted rounded-full opacity-10 ${isAnimating ? 'animate-ping' : ''}`}></div>
-              <div className="relative z-10">
-                <Image
-                  src="https://images.pexels.com/photos/2382934/pexels-photo-2382934.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                  alt="Farmer using voice assistant"
-                  width={500}
-                  height={500}
-                  className="rounded-2xl shadow-2xl object-cover"
-                />
-                
-                {/* Voice waves animation */}
-                <div className={`absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 h-64 w-64 flex items-center justify-center ${isAnimating ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}>
-                  {[...Array(3)].map((_, i) => (
-                    <div 
-                      key={i} 
-                      className="absolute inset-0 border-4 border-primary rounded-full"
-                      style={{ 
-                        animationDelay: `${i * 0.2}s`,
-                        animation: isAnimating ? 'ripple 2s linear infinite' : 'none'
-                      }} 
+          <div className="flex-1 flex justify-center">
+            <div
+              className={cn(
+                "relative w-full max-w-md aspect-square rounded-2xl overflow-hidden shadow-xl",
+                isDark ? "bg-[#1A2A3A]" : "bg-white"
+              )}
+            >
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="relative w-3/4 h-3/4">
+                  {/* Animated illustration of a farmer speaking to a device */}
+                  <div
+                    className={cn(
+                      "absolute inset-0 flex items-center justify-center",
+                      "animate-[pulse_3s_ease-in-out_infinite]"
+                    )}
+                  >
+                    <svg
+                      width="200"
+                      height="200"
+                      viewBox="0 0 200 200"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="100"
+                        cy="100"
+                        r="50"
+                        fill={isDark ? "#FF8F00" : "#D35400"}
+                        fillOpacity="0.2"
+                      />
+                      <circle
+                        cx="100"
+                        cy="100"
+                        r="30"
+                        fill={isDark ? "#FF8F00" : "#D35400"}
+                        fillOpacity="0.4"
+                      />
+                      <circle
+                        cx="100"
+                        cy="100"
+                        r="15"
+                        fill={isDark ? "#FF8F00" : "#D35400"}
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Farmer silhouette */}
+                  <svg
+                    className="absolute bottom-0 left-0"
+                    width="120"
+                    height="120"
+                    viewBox="0 0 120 120"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M40 80C40 69 49 60 60 60C71 60 80 69 80 80V100H40V80Z"
+                      fill={isDark ? "#66BB6A" : "#2E8B57"}
                     />
-                  ))}
+                    <circle
+                      cx="60"
+                      cy="45"
+                      r="15"
+                      fill={isDark ? "#66BB6A" : "#2E8B57"}
+                    />
+                    <path
+                      d="M85 75C85 75 95 85 95 95M35 75C35 75 25 85 25 95"
+                      stroke={isDark ? "#66BB6A" : "#2E8B57"}
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+
+                  {/* Sound waves */}
+                  <svg
+                    className="absolute top-10 right-0"
+                    width="80"
+                    height="80"
+                    viewBox="0 0 80 80"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 40H60M10 25H70M30 55H50"
+                      stroke={isDark ? "#FFC107" : "#FFB30F"}
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      className="animate-[pulse_2s_ease-in-out_infinite]"
+                    />
+                  </svg>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <style jsx>{`
-        @keyframes ripple {
-          0% {
-            transform: scale(0.1);
-            opacity: 1;
-          }
-          100% {
-            transform: scale(1);
-            opacity: 0;
-          }
-        }
-      `}</style>
     </section>
   );
 }
